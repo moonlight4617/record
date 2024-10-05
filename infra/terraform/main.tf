@@ -8,7 +8,7 @@ terraform {
 
   required_version = ">= 1.9.5"
 
-  # tfstateはS3ni保存
+  # tfstateはS3に保存
   backend "s3" {
     bucket         = "record-tfstate-01"
     key            = "global/s3/terraform.tfstate"
