@@ -22,3 +22,29 @@ resource "aws_cognito_user_pool_client" "client" {
 
   generate_secret = false
 }
+
+resource "aws_cognito_identity_provider" "google_provider" {
+  user_pool_id  = aws_cognito_user_pool.main.id
+  provider_name = "Google"
+  provider_type = "Google"
+  provider_details = {
+    "attributes_url"                = "https://people.googleapis.com/v1/people/me?personFields="
+    "attributes_url_add_attributes" = "true"
+    "authorize_scopes"              = "email profile openid"
+    "authorize_url"                 = "https://accounts.google.com/o/oauth2/v2/auth"
+    "client_id"                     = "" # secret情報なのでソースとして記載しない
+    "client_secret"                 = "" # secret情報なのでソースとして記載しない
+    "oidc_issuer"                   = "https://accounts.google.com"
+    "token_request_method"          = "POST"
+    "token_url"                     = "https://www.googleapis.com/oauth2/v4/token"
+  }
+  attribute_mapping = {
+    email    = "email"
+    username = "sub"
+  }
+}
+
+resource "aws_cognito_user_pool_domain" "main" {
+  domain       = "record-01"
+  user_pool_id = aws_cognito_user_pool.main.id
+}
