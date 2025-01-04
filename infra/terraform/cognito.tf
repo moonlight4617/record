@@ -1,12 +1,21 @@
 resource "aws_cognito_user_pool" "main" {
   name = "user_pool"
 
+  auto_verified_attributes = [
+    "email",
+  ]
   password_policy {
-    minimum_length    = 8
-    require_lowercase = true
-    require_numbers   = true
-    require_symbols   = false
-    require_uppercase = true
+    minimum_length                   = 8
+    require_lowercase                = true
+    require_numbers                  = true
+    require_symbols                  = false
+    require_uppercase                = true
+    temporary_password_validity_days = 7
+  }
+  user_attribute_update_settings {
+    attributes_require_verification_before_update = [
+      "email",
+    ]
   }
 }
 
